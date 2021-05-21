@@ -52,9 +52,28 @@ describe('User', () => {
         .send({ username: 'foobie', password: 'bar' })
       expect(res.status).toBe(200)
     })
-
-    
   });
+
+  describe('[GET] /api/jokes', () => {
+    it('cannot get jokes w/o login', async () => {
+      const res = await request(server)
+        .get('/api/jokes')
+      expect(res.status).toBe(401)
+    });
+    it('can get jokes after login', async () => {
+      await request(server)
+        .post('/api/auth/register')
+        .send({ username: 'foobie', password: 'bar' })
+      const loginRes = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'foobie', password: 'bar' })
+      // console.log(loginRes.body.token)
+      const res = await request(server)
+        .get('/api/jokes')
+        .set({'Authorization': loginRes.body.token})
+      expect(res.status).toBe(200)
+    })
+  })
 
 
 

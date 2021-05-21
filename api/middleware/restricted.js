@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
       the response body should include a string exactly as follows: "token invalid".
   */
   const token = req.headers.authorization;
-  console.log(req.headers.authorization)
+  // console.log(req.headers.authorization)
   if (token) {
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const Users = require('../users/users-model');
 const buildToken = require('./token-builder');
+const checkUsernamePassword = require('../middleware/checkUsernamePassword');
 
 router.post('/register', (req, res, next) => {
   // res.end('implement register, please!');
@@ -43,7 +44,7 @@ router.post('/register', (req, res, next) => {
 
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', checkUsernamePassword, (req, res, next) => {
   // res.end('implement login, please!');
   /*
     IMPLEMENT

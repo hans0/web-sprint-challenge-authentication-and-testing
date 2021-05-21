@@ -1,14 +1,20 @@
 const db = require('../../data/dbConfig')
 
 module.exports = {
+  getAll,
   findById,
   findBy,
   add,
 }
 
+function getAll() {
+  return db('users')
+}
+
 function findById(id) {
   return db('users as u')
-    .select('u.id', 'u.username', 'u.password');
+    .select('u.id', 'u.username', 'u.password')
+    .where({ id });
 }
 
 function findBy(filter) {

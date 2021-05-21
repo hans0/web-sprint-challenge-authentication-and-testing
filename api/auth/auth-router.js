@@ -1,18 +1,24 @@
 const router = require('express').Router();
+const bcrypt = require('bcrypt');
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+const Users = require('../users/users-model')
+
+router.post('/register', (req, res, next) => {
+  // res.end('implement register, please!');
   /*
-    IMPLEMENT
-    You are welcome to build additional middlewares to help with the endpoint's functionality.
-    DO NOT EXCEED 2^8 ROUNDS OF HASHING!
-
-    1- In order to register a new account the client must provide `username` and `password`:
-      {
-        "username": "Captain Marvel", // must not exist already in the `users` table
-        "password": "foobar"          // needs to be hashed before it's saved
-      }
-
+  IMPLEMENT
+  You are welcome to build additional middlewares to help with the endpoint's functionality.
+  DO NOT EXCEED 2^8 ROUNDS OF HASHING!
+  
+  1- In order to register a new account the client must provide `username` and `password`:
+  {
+    "username": "Captain Marvel", // must not exist already in the `users` table
+    "password": "foobar"          // needs to be hashed before it's saved
+  }
+  */
+  const { username, password } = req.body;
+  const hashedPassword = bcrypt.hashSync(password, 8);
+  /*
     2- On SUCCESSFUL registration,
       the response body should have `id`, `username` and `password`:
       {
@@ -27,6 +33,13 @@ router.post('/register', (req, res) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
+  Users.add({ username, password: hashedPassword })
+    .then(noidea => {
+      res.status(201).json(noidea)
+    })
+    .catch(next)
+  
+
 });
 
 router.post('/login', (req, res) => {
@@ -40,7 +53,9 @@ router.post('/login', (req, res) => {
         "username": "Captain Marvel",
         "password": "foobar"
       }
-
+  */
+  
+  /*
     2- On SUCCESSFUL login,
       the response body should have `message` and `token`:
       {
